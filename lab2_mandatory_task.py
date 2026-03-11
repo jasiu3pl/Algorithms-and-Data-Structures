@@ -64,6 +64,8 @@ class LinkedList:
             current.next = None
         
     def __str__(self):
+        if self.is_empty():
+            return "List is empty"
         res=""
         current = self.head
         while current:
