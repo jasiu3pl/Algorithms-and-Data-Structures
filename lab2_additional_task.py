@@ -5,7 +5,7 @@ class Node:
         self.prev = None
         
 class DoublyLinkedList:
-    def __init__(self, tail):
+    def __init__(self):
         self.head = None
         self.tail = None
         
@@ -27,7 +27,14 @@ class DoublyLinkedList:
         return self.head.data
         
     def destroy(self):
+        curr = self.head
+        while curr:
+            next_node = curr.next
+            curr.prev = None
+            curr.next = None
+            curr = next_node
         self.head = None
+        self.tail = None
         
     def add(self, data):
         new_node = Node(data)
@@ -42,28 +49,34 @@ class DoublyLinkedList:
         new_node = Node(data)
         if self.is_empty():
             self.head = new_node
-        else:    
+            self.tail = new_node
+        else:
+            self.tail.next = new_node
+            new_node.prev = self.tail
+            self.tail = new_node   
             
     
     def remove(self):
         if self.is_empty():
             raise ValueError("List is empty")
         
-        self.head = self.head.next
+        if self.head == self.tail:
+            self.head = None
+            self.tail = None
+        else:
+            self.head = self.head.next
+            self.head.prev = None
         
     def remove_end(self):
         if self.is_empty():
             raise ValueError("List is empty")
         
-        if self.head.next is None:
+        if self.head == self.tail:
             self.head = None
-        
+            self.tail = None
         else:
-            current = self.head
-            while current.next.next:
-                current = current.next
-            
-            current.next = None
+            self.tail = self.tail.prev
+            self.tail.next = None
         
     def __str__(self):
         res=""
@@ -72,7 +85,14 @@ class DoublyLinkedList:
             res += f"-> {current.data} \n"
             current = current.next
         return res
-        
+    
+    def print_reverse(self):
+        res=""
+        current = self.tail
+        while current:
+            res += f"-> {current.data} \n"
+            current = current.prev
+        return res
     
 def main():
     dane_uczelnie = [('AGH', 'Kraków', 1919),
@@ -83,7 +103,7 @@ def main():
     ('PG', 'Gdańsk', 1945)]
     
     #ex1
-    uczelnie = LinkedList()
+    uczelnie = DoublyLinkedList()
     for uczelnia in dane_uczelnie[:3]:
         uczelnie.append(uczelnia)
     
@@ -92,7 +112,10 @@ def main():
         uczelnie.add(uczelnia)
     
     #ex3
+    print('PRINTING FORWARD:\n')
     print(uczelnie)
+    print('PRINTING REVERSE:\n')
+    print(uczelnie.print_reverse())
     
     #ex4
     print(uczelnie.length())
@@ -103,7 +126,10 @@ def main():
     
     #ex6
     uczelnie.remove_end()
+    print('PRINTING FORWARD:\n')
     print(uczelnie)
+    print('PRINTING REVERSE:\n')
+    print(uczelnie.print_reverse())
     
     #ex7
     uczelnie.destroy()
@@ -123,11 +149,17 @@ def main():
     
     #ex10
     uczelnie.append(dane_uczelnie[0])
+    print('PRINTING FORWARD:\n')
     print(uczelnie)
+    print('PRINTING REVERSE:\n')
+    print(uczelnie.print_reverse())
     
     #ex11
     uczelnie.remove_end()
+    print('PRINTING FORWARD:\n')
     print(uczelnie)
+    print('PRINTING REVERSE:\n')
+    print(uczelnie.print_reverse())
     
     #ex12
     print(uczelnie.is_empty())
