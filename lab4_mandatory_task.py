@@ -43,18 +43,71 @@ class HashTable:
         return None
     
     def insert(self, key, value):
+        first_free_index = None
+        for i in range(self.size):
+            idx = self._get_index(key, i)
+            val = self.tab[idx]
+
+            if val == self.deleted and first_free_index is None:
+                first_free_index = idx
+            
+            if val is None:
+                if first_free_index is not None:
+                    self.tab[first_free_index] = Element(key, value)
+                else:
+                    self.tab[idx] = Element(key, value)
+                return
+            
+            if isinstance(val, Element) and val.key == key:
+                self.tab[idx] = Element(key, value)
+                return
+        
+        if first_free_index is not None:
+            self.tab[first_free_index] = Element(key, value)
+            return
+        
+        raise ValueError("Brak miejsca")
+    
+    def remove(self, key):
         for i in range(self.size):
             idx = self._get_index(key, i)
             val = self.tab[idx]
          
-            if val is None or val == self.deleted:
-                self.tab[idx] = Element(key, value)
-                return
+            if val is None:
+                raise ValueError("Brak danej")
+        
+            if val == self.deleted:
+                continue
             
             if isinstance(val, Element) and val.key == key:
-                val.value = value
+                self.tab[idx] = self.deleted
                 return
         
-        return None
+        raise ValueError("Brak danej")
+    
+    def __str__(self):
+        half_res = []
+        for val in self.tab:
+            if val is None or val is self.deleted:
+                half_res.append("None")
+            elif isinstance(val, Element):
+                half_res.append(str(val))
         
+        res = ", ".join(half_res)
         
+        return "{" + res + "}"
+    
+    
+def test_1(size, c1=1, c2=0):
+    table = HashTable(size, c1, c2)
+    klucze = [i for i in range(1,16)]
+    klucze[5] = 18
+    klucze[6] = 31
+    for i in range(15):
+        litera = chr(65 + i)
+        try:
+            table.insert(klucze[i], litera)
+        except ValueError as e:
+            print(f"ValueError: {e}\n")
+            
+    print(table)
