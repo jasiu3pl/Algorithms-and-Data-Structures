@@ -108,6 +108,50 @@ def test_1(size, c1=1, c2=0):
         try:
             table.insert(klucze[i], litera)
         except ValueError as e:
-            print(f"ValueError: {e}\n")
+            print(f"ValueError dla klucza {i}: {e}\n")
             
+    print(table,"\n")
+    print(table.search(5), "\n")
+    print(table.search(14), "\n")
+    try:
+        print(table.insert(5, chr(90)), "\n")
+    except ValueError as e:
+        print(f"ValueError: {e}\n")
+    print(table.search(5), "\n")
+    try:
+        print(table.remove(5), "\n")
+    except ValueError as e:
+        print(f"ValueError: {e}\n")
+    print(table, "\n")
+    print(table.search(31), "\n")
+    try:
+        print(table.insert("test", chr(87)), "\n")
+    except ValueError as e:
+        print(f"ValueError: {e}\n")
+    print(table, "\n")
+    
+# test_1(13,1,0)
+
+def test_2(size, c1=1, c2=0):
+    table = HashTable(size, c1, c2)
+    for i in range(15):
+        litera = chr(65 + i)
+        klucz = 13 * (i + 1)
+        try:
+            table.insert(klucz, litera)
+        except ValueError as e:
+            print(f"ValueError dla klucza {i}: {e}\n")
     print(table)
+    
+def main():
+    print("------FUNKCJA TESTUJACA NR1 PROBKOWANIE LINIOWE------\n")
+    test_1(13,1,0)
+    print("------FUNKCJA TESTUJACA NR2 PROBKOWANIE LINIOWE------\n")            
+    test_2(13,1,0)
+    print("------FUNKCJA TESTUJACA NR2 PROBKOWANIE KWADRATOWE------\n") 
+    test_2(13,0,1)
+    print("------FUNKCJA TESTUJACA NR1 PROBKOWANIE KWADRATOWE------\n")
+    test_1(13,0,1)
+                
+if __name__ == "__main__":
+    main()
