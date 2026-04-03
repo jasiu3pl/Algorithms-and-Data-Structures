@@ -76,17 +76,32 @@ class BST:
         self.root = self._delete_node(self.root, key)
     
     def _delete_node(self, node, key):
-        # if node is None:
-        #     return node
+        if node is None:
+            return node
         
-        # if key < node.key:
-        #     node.left = self._delete_node(node.left, key)
+        if key < node.key:
+            node.left = self._delete_node(node.left, key)
         
-        # elif key > node.key:
-        #     node.right = self._delete_node(node.right, key)
+        elif key > node.key:
+            node.right = self._delete_node(node.right, key)
             
-        # else:
-        pass
+        else:
+            if node.left is None:
+                return node.right
+            
+            elif node.right is None:
+                return node.left
+            
+            else:
+                temp = node.right
+                while temp.left:
+                    temp = temp.left
+                    
+                node.key, node.value = temp.key, temp.value
+                node.right = self._delete_node(node.right, temp.key)
+        
+        return node
+            
      
     def print_tree(self):
         print("==============")
@@ -111,6 +126,37 @@ def main():
         
     tree.print_tree()
     tree.print_as_list()
+    
+    print(tree.search(24), "\n")
+    
+    tree.insert(20, "AA")
+    
+    tree.insert(6, "M")
+    
+    tree.delete(62)
+    
+    # dodaj element 59:N
+    tree.insert(59, "N")
+    # dodaj element 100:P
+    tree.insert(100, "P")
+    # usuń element o kluczu 8
+    tree.delete(8)
+    # usuń element o kluczu 15
+    tree.delete(15)
+    # wstaw element 55:R
+    tree.insert(55, "R")
+    # usuń element o kluczu 50
+    tree.delete(50)
+    # usuń element o kluczu 5
+    tree.delete(5)
+    # usuń element o kluczu 24
+    tree.delete(24)
+    # wypisz wysokość drzewa
+    print(tree.height())
+    # wyświetl zawartość drzewa jako listę elementów
+    tree.print_as_list()
+    # wyświetl drzewo 2D
+    tree.print_tree()
     
 if __name__ == "__main__":
     main()
