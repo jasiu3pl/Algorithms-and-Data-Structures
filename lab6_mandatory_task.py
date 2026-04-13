@@ -61,20 +61,65 @@ class PriorityQueue:
             l = self.left(idx)
             r = self.right(idx)
             greatest = idx
-            if self.tab[l] < self.tab[self.heap_size]:
-                if l > greatest:
+            if l < self.heap_size:
+                if self.tab[l] > self.tab[greatest]:
                     greatest = l
-            if self.tab[r] < self.tab[self.heap_size]:
-                if r > greatest:
+                    
+            if r < self.heap_size:
+                if self.tab[r] > self.tab[greatest]:
                     greatest = r
-            elif greatest == idx:
+                    
+            if greatest == idx:
                 break
             else:
                 self.tab[greatest], self.tab[idx] = self.tab[idx], self.tab[greatest]
+                idx = greatest
                     
-                
+    def print_tab(self):
+        print ('{', end=' ')
+        print(*self.tab[:self.heap_size], sep=', ', end = ' ')
+        print( '}')
         
+    def print_tree(self, idx, lvl):
+        if idx<self.heap_size:           
+            self.print_tree(self.right(idx), lvl+1)
+            print(2*lvl*'  ', self.tab[idx] if self.tab[idx] else None)           
+            self.print_tree(self.left(idx), lvl+1)           
+    
         
-            
+
+def main():
+    # utworzenie pustej kolejki
+    queue = PriorityQueue()
+    # użycie w pętli enqueue do wpisana do niej elementów których priorytety będą brane z listy [7, 5, 1, 2, 5, 3, 4, 8, 9], a odpowiadające im wartości będą kolejnymi literami z napisu "GRYMOTYLA"
+    prior_list = [7, 5, 1, 2, 5, 3, 4, 8, 9]
+    letters = ["G", "R", "Y", "M", "O", "T", "Y", "L", "A"]
+    for prior, letter in zip(prior_list, letters):
+        elem = Element(letter, prior)
+        queue.enqueue(elem)
+    # wypisanie aktualnego stanu kolejki w postaci kopca
+    queue.print_tree(0, 0)
+    # wypisanie aktualnego stanu kolejki w postaci tablicy
+    queue.print_tab()
+    # użycie dequeue do odczytu  pierwszej  danej z kolejki, proszę ją zapamiętać
+    greatest = queue.dequeue()
+    # użycie  peek do odczytu i wypisania kolejnej  danej
+    great_child = queue.peek()
+    print(great_child)
+    # wypisanie aktualnego stanu kolejki w postaci tablicy
+    queue.print_tab()
+    # wypisanie zapamiętanej, usuniętej pierwszej danej z kolejki
+    print(greatest)
+    # opróżnienie kolejki z wypisaniem usuwanych danych (użycie dequeue w pętli dopóki w kolejce będą dane)
+    while not queue.is_empty():
+        val = queue.dequeue()
+        print(val)
+        
+    # wypisanie opróżnionej kolejki w postaci tablicy (powinno się wypisać { } )
+    queue.print_tab()
+    
+    
+if __name__ == "__main__":
+    main()    
         
     
