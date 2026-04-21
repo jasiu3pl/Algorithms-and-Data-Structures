@@ -1,3 +1,5 @@
+import time
+import random
 class Element:
     def __init__(self, dane, priorytet):
         self.__dane = dane
@@ -92,28 +94,69 @@ class PriorityQueue:
             print(2*lvl*'  ', self.tab[idx] if self.tab[idx] else None)           
             self.print_tree(self.left(idx), lvl+1)
             
+def selection_sort_swap(tab):
+    for i in range(0, len(tab)):
+        m = min(tab[i:])
+        idx_m = tab.index(m, i)
+        tab[i], tab[idx_m] = tab[idx_m], tab[i]
+    return tab
+        
+def selection_sort_shift(tab):
+    for i in range(0, len(tab)):
+        m = min(tab[i:])
+        idx_m = tab.index(m, i)
+        deleted_elem = tab.pop(idx_m)
+        tab.insert(i, deleted_elem)
+    return tab
+            
             
 def main():
-    # Niech dana będzie lista krotek:
-    # [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]
-    # Stwórz na jej podstawie listę (tablicę), której elementy są obiektami utworzonej na poprzednich zajęciach klasy.
-    # Przykładowo może to być instrukcja:
-    # [ Elem(key, value) for key,value in  [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]]
-    tab = [Element(key, value) for key,value in  [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]]
-    # Przekaż tak utworzoną tablicę jako parametr konstruktora przy tworzeniu kopca.
-    heap = PriorityQueue(tab)
-    # Wypisz utworzony kopiec jako tablicę i jako drzewo 2D, a następnie, po rozebraniu kopca, wypisz posortowaną tablicę (tą którą kopiec dostał jako argument przy jego tworzeniu).
-    heap.print_tree(0, 0)
-    heap.print_tab()
-    # Zaobserwuj i wypisz, czy sortowanie jest stabilne, tzn. czy kolejność elementów o tym samym priorytecie zostanie zachowana (w porównaniu z ich kolejnością w liście z danymi). Wypisane powinno zostać jedno słowo:
-    while not heap.is_empty():
-        heap.dequeue()
-    print("Posortowana tablica:")
-    print(heap.tab)
-    print("NIESTABILNE")
-    # STABILNE lub NIESTABILNE
+    test = int(input("Podaj, ktory test chcesz wykonac - 1 lub 2: "))
+    match test:
+        case 1:
+            tab = [Element(value, key) for key,value in  [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]]
+            heap = PriorityQueue(tab)
+            heap.print_tree(0, 0)
+            heap.print_tab()
+            while not heap.is_empty():
+                heap.dequeue()
+            print("Posortowana tablica:")
+            print(heap.tab)
+            print("NIESTABILNE\n")
+            
+            tab = [Element(value, key) for key,value in  [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]]
+            swap = selection_sort_swap(tab)
+            print(tab)
+            print("Posortowana tablica:")
+            print(swap)
+            print("STABILNE\n")
+            tab = [Element(value, key) for key,value in  [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]]
+            shift = selection_sort_shift(tab)
+            print(tab)
+            print("Posortowana tablica:")
+            print(shift)
+            print("STABILNE\n")
+        case 2:
+            tab = [int(random.random() * 100) for _ in range(10000)]
+            tab_heap = tab.copy()
+            tab_swap = tab.copy()
+            tab_shift = tab.copy()
+            t_start = time.perf_counter()
+            heap = PriorityQueue(tab_heap)
+            while not heap.is_empty():
+                heap.dequeue()
+            t_stop = time.perf_counter()
+            print("Czas sortowania kopcowego:", "{:.7f}".format(t_stop - t_start))
+            
+            t_start = time.perf_counter()
+            selection_sort_swap(tab_swap) 
+            t_stop = time.perf_counter()
+            print("Czas sortowania selection_sort_swap:", "{:.7f}".format(t_stop - t_start))
     
-    
+            t_start = time.perf_counter()
+            selection_sort_shift(tab_shift) 
+            t_stop = time.perf_counter()
+            print("Czas sortowania selection_sort_shift:", "{:.7f}".format(t_stop - t_start))
     
 if __name__ == "__main__":
     main()
