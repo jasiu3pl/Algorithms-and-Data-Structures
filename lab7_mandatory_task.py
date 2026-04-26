@@ -125,14 +125,15 @@ def main():
             print("NIESTABILNE\n")
             
             tab = [Element(value, key) for key,value in  [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]]
-            swap = selection_sort_swap(tab)
             print(tab)
+            swap = selection_sort_swap(tab)
             print("Posortowana tablica:")
             print(swap)
-            print("STABILNE\n")
+            print("NIEsSTABILNE\n")
+            
             tab = [Element(value, key) for key,value in  [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]]
-            shift = selection_sort_shift(tab)
             print(tab)
+            shift = selection_sort_shift(tab)
             print("Posortowana tablica:")
             print(shift)
             print("STABILNE\n")
