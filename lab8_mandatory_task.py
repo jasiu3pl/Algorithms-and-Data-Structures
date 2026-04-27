@@ -129,4 +129,55 @@ class AdjecencyMatrix:
         self.matrix[i][j] = 0
         
     def delete_vertex(self, vertex):
-        pass
+        n = len(self.nodes)
+        idx = self.nodes.index(vertex)
+        self.nodes.pop(idx)
+        new_matrix = Matrix((n-1, n-1))
+        
+        new_i = 0
+        for i in range(n):
+            if i == idx:
+                continue
+            
+            new_j = 0
+            for j in range(n):
+                if j == idx:
+                    continue
+                
+                new_matrix[new_i][new_j] = self.matrix[i][j]
+                
+                new_j += 1
+            new_i += 1
+        
+        self.matrix = new_matrix
+        
+    def vertices(self):
+        return [i for i in range(0, len(self.nodes))]
+    
+    def get_vertex(self, vertex_id):
+        return self.nodes[vertex_id]
+    
+    def neighbours(self, vertex_id):
+        for idx, value in enumerate(self.matrix[vertex_id]):
+            if value > 0:
+                yield (idx, value)
+                
+def main():
+    graph_list = AdjecencyList()
+    for x, y, litera in polska.polska: 
+        graph_list.insert_vertex(Vertex(litera))
+        
+    for v1, v2 in polska.graf:
+        graph_list.insert_edge(Vertex(v1), Vertex(v2))
+        
+    graph_list.delete_vertex(Vertex('K'))
+    
+    graph_list.delete_edge(Vertex('W'), Vertex('E'))
+    graph_list.delete_edge(Vertex('E'), Vertex('W'))
+    
+    polska.draw_map(graph_list)
+    
+if __name__ == "__main__":
+    main()
+            
+                
