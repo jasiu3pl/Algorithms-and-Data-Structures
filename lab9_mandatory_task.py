@@ -92,5 +92,24 @@ def bfs(graph, start_node, end_node):
                 
     return parent
         
+def get_path_flow(graph, start_node, end_node, parent):
+    if end_node not in parent:
+        return 0
     
+    min_flow = float('inf')
+    current = end_node
+    
+    while current != start_node:
+        p = parent[current]
+        edge = graph.get_edge(p, current)
+        
+        if edge.residual_capacity < min_flow:
+            min_flow = edge.residual_capacity
+            
+        current = p
+    
+    return min_flow
+
+def augment_path(graph, start_node, end_node, parent, min_flow):
+    pass
         
